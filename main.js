@@ -8,6 +8,9 @@ if (!process.argv[2]) {
 var cmd_get_report_suite = './node_modules/.bin/phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ',
     out_try_again = 'NOT-FOUND';
 
+var MemoryWorker = require('./memory-worker'),
+    worker = new MemoryWorker(10);
+
 var fs = require('fs'),
     debug = require('debug'),
     exec = require('child_process').exec;
@@ -34,7 +37,7 @@ function stat() {
     log_status('completed %s out of %s', req_completed, req_count);
 }
 
-function get_report_suite(url, mobile, label) {
+function get_report_suite(url, mobile, label, done) {
     mobile = mobile ? ' 1' : '';
 
     (function get_report_suite_id() {
@@ -55,6 +58,7 @@ function get_report_suite(url, mobile, label) {
             } else {
                 write(url + ' ' + label + ':\t' + stdout);
                 stat();
+                done();
             }
         });
     })();
@@ -66,8 +70,13 @@ writing.once('open', function () {
         req_count += urls.length * 2;
 
         urls.forEach(function (url) {
-            get_report_suite(url, false, '(desktop)');
-            get_report_suite(url, true, '(mobile)');
+            worker.run(function (done) {
+                get_report_suite(url, false, '(desktop)', done);
+            });
+
+            worker.run(function (done) {
+                get_report_suite(url, true, '(mobile)', done);
+            });
         });
     });
 });
