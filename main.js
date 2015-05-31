@@ -5,6 +5,8 @@ if (!process.argv[2]) {
     process.exit(1);
 }
 
+var retry_max = 3;
+
 var cmd_get_report_suite = './node_modules/.bin/phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ',
     out_try_again = 'NOT-FOUND';
 
@@ -49,11 +51,16 @@ function get_report_suite(url, mobile, label, done) {
                 return;
             }
 
+            if (!get_report_suite_id.retry_count) {
+                get_report_suite_id.retry_count = 0;
+            }
+
             stdout = stdout.trim();
             if (stdout === out_try_again && !get_report_suite_id.force) {
                 req_completed--;
-                log_retry('checking %s again', url);
-                get_report_suite_id.force = true;
+                get_report_suite_id.retry_count++;
+                log_retry('checking %s again (#%s)', url, get_report_suite_id.retry_count);
+                get_report_suite_id.force = get_report_suite_id.retry_count >= retry_max;
                 get_report_suite_id();
             } else {
                 write(url + ' ' + label + ':\t' + stdout);

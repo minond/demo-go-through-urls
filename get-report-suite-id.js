@@ -45,7 +45,7 @@ page.open(url, function (status) {
         }
 
         phantom.exit();
-    }, 1000);
+    }, 2000);
 });
 
 setTimeout(phantom.exit, 60000);
