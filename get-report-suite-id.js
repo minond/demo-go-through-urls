@@ -47,7 +47,7 @@ page.onLoadFinished = function () {
         }
 
         phantom.exit();
-    }, 2000);
+    }, 5000);
 };
 
 setTimeout(phantom.exit, 60000);
