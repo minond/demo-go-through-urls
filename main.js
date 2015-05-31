@@ -1,16 +1,16 @@
 'use strict';
 
+if (!process.argv[2]) {
+    console.log('Usage: %s urls_file', process.argv.join(' '));
+    process.exit(1);
+}
+
 var cmd_get_report_suite = './node_modules/.bin/phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ',
     out_try_again = 'NOT-FOUND';
 
 var fs = require('fs'),
     debug = require('debug'),
     exec = require('child_process').exec;
-
-if (!process.argv[2]) {
-    console.log('Usage: %s urls_file', process.argv.join(' '));
-    process.exit(1);
-}
 
 var urls_file = process.argv[2],
     reading = fs.createReadStream(urls_file);
