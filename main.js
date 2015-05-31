@@ -5,9 +5,10 @@ if (!process.argv[2]) {
     process.exit(1);
 }
 
+var devices = ['desktop', 'iphone', 'ipad'];
 var retry_max = 3;
 
-var cmd_get_report_suite = './node_modules/.bin/phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ',
+var cmd_get_report_suite = './node_modules/.bin/phantomjs --ignore-ssl-errors=yes get-report-suite-id.js',
     out_try_again = 'NOT-FOUND';
 
 var MemoryWorker = require('./memory-worker'),
@@ -39,11 +40,11 @@ function stat() {
     log_status('completed %s out of %s', req_completed, req_count);
 }
 
-function get_report_suite(url, mobile, label, done) {
-    mobile = mobile ? ' 1' : '';
+function get_report_suite(url, device_type, label, done) {
+    var command = [cmd_get_report_suite, url, device_type].join(' ');
 
     (function get_report_suite_id() {
-        exec(cmd_get_report_suite + url + mobile, function (err, stdout, stderr) {
+        exec(command, function (err, stdout, stderr) {
             req_completed++;
 
             if (err) {
@@ -74,15 +75,13 @@ function get_report_suite(url, mobile, label, done) {
 writing.once('open', function () {
     reading.on('data', function (data) {
         var urls = data.toString().trim().split('\n');
-        req_count += urls.length * 2;
+        req_count += urls.length * devices.length;
 
         urls.forEach(function (url) {
-            worker.run(function (done) {
-                get_report_suite(url, false, '(desktop)', done);
-            });
-
-            worker.run(function (done) {
-                get_report_suite(url, true, '(mobile)', done);
+            devices.forEach(function (device) {
+                worker.run(function (done) {
+                    get_report_suite(url, device, '(' + device + ')', done);
+                });
             });
         });
     });

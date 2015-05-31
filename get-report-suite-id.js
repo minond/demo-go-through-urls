@@ -5,17 +5,18 @@ var system = require('system'),
     page = webpage();
 
 if (!system.args[1]) {
-    console.log('Usage: %s url [mobile]', system.args[0]);
+    console.log('Usage: %s url [device_type]', system.args[0]);
     phantom.exit(1);
 }
 
 var url = system.args[1],
-    mobile = system.args[2];
+    device_type = system.args[2];
 
-if (mobile) {
-    // http://whatsmyuseragent.com/Devices/iPhone-User-Agent-Strings
-    page.settings.userAgent = 'Mozilla/5.0(iPhone;U;CPUiPhoneOS4_0likeMacOSX;en-us)AppleWebKit/532.9(KHTML,likeGecko)Version/4.0.5Mobile/8A293Safari/6531.22.7';
-}
+// http://whatsmyuseragent.com/Devices/iPhone-User-Agent-Strings
+var user_agents = {
+    'iphone': 'Mozilla/5.0(iPhone;U;CPUiPhoneOS4_0likeMacOSX;en-us)AppleWebKit/532.9(KHTML,likeGecko)Version/4.0.5Mobile/8A293Safari/6531.22.7',
+    'ipad': 'Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314 Safari/531.21.10'
+};
 
 page.onError = function () {};
 
