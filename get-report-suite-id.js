@@ -38,7 +38,14 @@ page.open(url, function (status) {
             }
         });
 
-        console.log(report_suite_id[1]);
+        if (report_suite_id && report_suite_id[1]) {
+            console.log(report_suite_id[1]);
+        } else {
+            console.log('NOT-FOUND');
+        }
+
         phantom.exit();
     }, 1000);
 });
+
+setTimeout(phantom.exit, 10000);
