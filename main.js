@@ -1,5 +1,8 @@
 'use strict';
 
+var cmd_get_report_suite = './node_modules/.bin/phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ',
+    out_try_again = 'NOT-FOUND';
+
 var fs = require('fs'),
     debug = require('debug'),
     exec = require('child_process').exec;
@@ -19,6 +22,7 @@ var req_count = 0,
     req_completed = 0;
 
 var log_status = debug('status'),
+    log_retry = debug('retry'),
     log_report = debug('report');
 
 function write(line) {
@@ -30,35 +34,40 @@ function stat() {
     log_status('completed %s out of %s', req_completed, req_count);
 }
 
+function get_report_suite(url, mobile, label) {
+    mobile = mobile ? ' 1' : '';
+
+    (function get_report_suite_id() {
+        exec(cmd_get_report_suite + url + mobile, function (err, stdout, stderr) {
+            req_completed++;
+
+            if (err) {
+                console.error('Error requesting %s (%s)', url, stderr.trim());
+                return;
+            }
+
+            stdout = stdout.trim();
+            if (stdout === out_try_again && !get_report_suite_id.force) {
+                req_completed--;
+                log_retry('checking %s again', url);
+                get_report_suite_id.force = true;
+                get_report_suite_id();
+            } else {
+                write(url + ' ' + label + ':\t' + stdout);
+                stat();
+            }
+        });
+    })();
+}
+
 writing.once('open', function () {
     reading.on('data', function (data) {
         var urls = data.toString().trim().split('\n');
         req_count += urls.length * 2;
 
         urls.forEach(function (url) {
-            exec('./node_modules/.bin/phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ' + url, function (err, stdout, stderr) {
-                req_completed++;
-
-                if (err) {
-                    console.error('Error requesting %s (%s)', url, stderr.trim());
-                    return;
-                }
-
-                write(url + ' (desktop):\t' + stdout.trim());
-                stat();
-            });
-
-            exec('./node_modules/.bin/phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ' + url + ' 1', function (err, stdout, stderr) {
-                req_completed++;
-
-                if (err) {
-                    console.error('Error requesting %s (%s)', url, stderr.trim());
-                    return;
-                }
-
-                write(url + ' (mobile):\t' + stdout.trim());
-                stat();
-            });
+            get_report_suite(url, false, '(desktop)');
+            get_report_suite(url, true, '(mobile)');
         });
     });
 });
