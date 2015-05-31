@@ -1,11 +1,32 @@
 'use strict';
 
+/**
+ * @usage
+ *   var jobs = new MemoryWorker(100);
+ *
+ *   var i = 100;
+ *   while (i--) {
+ *       jobs.run(function (done) {
+ *           setTimeout(function () {
+ *               console.log(new Date);
+ *               done();
+ *           }, 1000);
+ *       });
+ *   }
+ *
+ * @class MemoryWorker
+ * @param {Number} worker limit
+ */
 function MemoryWorker(limit) {
     this.limit = limit;
     this.in_progress = 0;
     this.queue = [];
 }
 
+/**
+ * queue a function
+ * @param {Function} action
+ */
 MemoryWorker.prototype.run = function (action) {
     this.queue.push(action);
     this.tick();
