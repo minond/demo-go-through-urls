@@ -36,11 +36,11 @@ writing.once('open', function () {
         req_count += urls.length * 2;
 
         urls.forEach(function (url) {
-            exec('phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ' + url, function (err, stdout, stderr) {
+            exec('./node_modules/.bin/phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ' + url, function (err, stdout, stderr) {
                 req_completed++;
 
                 if (err) {
-                    console.error('Error requesting %s', url);
+                    console.error('Error requesting %s (%s)', url, stderr.trim());
                     return;
                 }
 
@@ -48,11 +48,11 @@ writing.once('open', function () {
                 stat();
             });
 
-            exec('phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ' + url + ' 1', function (err, stdout, stderr) {
+            exec('./node_modules/.bin/phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ' + url + ' 1', function (err, stdout, stderr) {
                 req_completed++;
 
                 if (err) {
-                    console.error('Error requesting %s', url);
+                    console.error('Error requesting %s (%s)', url, stderr.trim());
                     return;
                 }
 
