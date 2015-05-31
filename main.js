@@ -16,15 +16,21 @@ reading.on('data', function (data) {
 
     urls.forEach(function (url) {
         exec('phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ' + url, function (err, stdout, stderr) {
-            console.log('%s: %s', url, stdout);
+            if (err) {
+                console.error('Error requesting %s', url);
+                return;
+            }
+
+            console.log('%s: %s', url, stdout.trim());
         });
 
         exec('phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ' + url + ' 1', function (err, stdout, stderr) {
-            console.log('%s (mobile): %s', url, stdout);
+            if (err) {
+                console.error('Error requesting %s', url);
+                return;
+            }
+
+            console.log('%s (mobile): %s', url, stdout.trim());
         });
     });
 });
-
-// reading.on('end', function () {
-//     process.exit();
-// });
