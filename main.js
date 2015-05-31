@@ -25,8 +25,8 @@ writing.once('open', function () {
                     return;
                 }
 
-                console.log('%s (desktop): %s', url, stdout.trim());
-                writing.write(url + ' (desktop): ' + stdout.trim() + '\n');
+                console.log('%s (desktop):\t%s', url, stdout.trim());
+                writing.write(url + ' (desktop):\t' + stdout.trim() + '\n');
             });
 
             exec('phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ' + url + ' 1', function (err, stdout, stderr) {
@@ -35,8 +35,8 @@ writing.once('open', function () {
                     return;
                 }
 
-                console.log('%s (mobile): %s', url, stdout.trim());
-                writing.write(url + ' (mobile): ' + stdout.trim() + '\n');
+                console.log('%s (mobile):\t%s', url, stdout.trim());
+                writing.write(url + ' (mobile):\t' + stdout.trim() + '\n');
             });
         });
     });
