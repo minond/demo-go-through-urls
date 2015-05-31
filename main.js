@@ -1,11 +1,17 @@
 'use strict';
 
-var webpage = require('webpage').create,
+var system = require('system'),
+    webpage = require('webpage').create,
     page = webpage();
 
-// page.settings.userAgent = '';
+var url = system.args[1],
+    mobile = system.args[2];
 
-page.open('http://www.walmart.com/', function (status) {
+if (mobile) {
+    page.settings.userAgent = 'Mozilla/5.0(iPhone;U;CPUiPhoneOS4_0likeMacOSX;en-us)AppleWebKit/532.9(KHTML,likeGecko)Version/4.0.5Mobile/8A293Safari/6531.22.7';
+}
+
+page.open(url, function (status) {
     setTimeout(function () {
         var report_suite_id = page.evaluate(function () {
             var report_suite_matcher = /https?:\/\/.+?\/b\/ss\/(.+?)\//,

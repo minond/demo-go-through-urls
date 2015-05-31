@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "phantomjs --ignore-ssl-errors=yes main.js"
+    "start": "phantomjs --ignore-ssl-errors=yes main.js $URL $MOBILE"
   },
   "author": "",
   "license": "ISC",
