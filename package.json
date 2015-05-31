@@ -1,0 +1,14 @@
+{
+  "name": "demo-go-through-urls",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "phantomjs --ignore-ssl-errors=yes main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "phantomjs": "^1.9.17"
+  }
+}
