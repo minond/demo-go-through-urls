@@ -48,4 +48,4 @@ page.open(url, function (status) {
     }, 1000);
 });
 
-setTimeout(phantom.exit, 10000);
+setTimeout(phantom.exit, 60000);
