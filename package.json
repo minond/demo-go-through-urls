@@ -4,11 +4,12 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "phantomjs --ignore-ssl-errors=yes get-report-suite-id.js $URL $MOBILE"
+    "get-report-suite": "phantomjs --ignore-ssl-errors=yes get-report-suite-id.js $URL $MOBILE"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "debug": "^2.2.0",
     "phantomjs": "^1.9.17"
   }
 }
