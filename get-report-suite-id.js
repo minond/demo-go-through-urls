@@ -19,7 +19,9 @@ if (mobile) {
 
 page.onError = function () {};
 
-page.open(url, function (status) {
+page.open(url);
+
+page.onLoadFinished = function () {
     setTimeout(function () {
         var report_suite_id = page.evaluate(function () {
             var report_suite_matcher = /https?:\/\/.+?\/b\/ss\/(.+?)\//,
@@ -46,6 +48,6 @@ page.open(url, function (status) {
 
         phantom.exit();
     }, 2000);
-});
+};
 
 setTimeout(phantom.exit, 60000);
