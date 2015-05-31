@@ -17,6 +17,8 @@ if (mobile) {
     page.settings.userAgent = 'Mozilla/5.0(iPhone;U;CPUiPhoneOS4_0likeMacOSX;en-us)AppleWebKit/532.9(KHTML,likeGecko)Version/4.0.5Mobile/8A293Safari/6531.22.7';
 }
 
+page.onError = function () {};
+
 page.open(url, function (status) {
     setTimeout(function () {
         var report_suite_id = page.evaluate(function () {
