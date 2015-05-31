@@ -21,7 +21,7 @@ reading.on('data', function (data) {
                 return;
             }
 
-            console.log('%s: %s', url, stdout.trim());
+            console.log('%s (desktop): %s', url, stdout.trim());
         });
 
         exec('phantomjs --ignore-ssl-errors=yes get-report-suite-id.js ' + url + ' 1', function (err, stdout, stderr) {
