@@ -35,18 +35,20 @@ page.onLoadFinished = function () {
 
             for (variable in window) {
                 // TODO check
-                if (variable.indexOf('s_i_') === 0 && window[variable].src) {
+                if (variable === 's_account') {
+                    return window[variable];
+                } else if ((variable.indexOf('s_i_') === 0 || variable.indexOf('s_account') === 0) && window[variable].src) {
                     report_suite_url = window[variable].src.match(report_suite_matcher);
 
                     if (report_suite_url) {
-                        return report_suite_url;
+                        return report_suite_url[1];
                     }
                 }
             }
         });
 
-        if (report_suite_id && report_suite_id[1]) {
-            console.log(report_suite_id[1]);
+        if (report_suite_id) {
+            console.log(report_suite_id);
         } else {
             console.log('NOT-FOUND');
         }
